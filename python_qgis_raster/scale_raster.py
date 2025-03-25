@@ -9,8 +9,8 @@ from qgis.core import QgsRasterLayer
 SCALE_FACTOR = 1.0003181600  # Scale factor for x and y
 
 # Directory containing orthomosaic 
-ORTHO_DIR = r"C:\Farid\Projects\20250219 - West Central\UAS\07_DELIVERABLES\orthomosaic"
-ortho_file_read = os.path.join(ORTHO_DIR, "West_Central_Pix4D-orthomosaic.jpg")
+ORTHO_DIR = r"C:\Farid\Projects\20250219 - West Central\UAS\07_DELIVERABLES\orthoimage"
+ortho_file_read = os.path.join(ORTHO_DIR, "orthoimage.jpg")
 
 
 # =====================================
@@ -33,15 +33,17 @@ gsd_y = (extent.yMaximum() - extent.yMinimum()) / height
 # Define rotation values (assuming north-oriented data)
 theta_x, theta_y = 0, 0
 
-# Extract NW corner coordinates
-x0, y0 = extent.xMinimum(), extent.yMaximum()
+# Extract NW corner coordinates (adjusted for pixel center)
+x0 = extent.xMinimum() + gsd_x / 2
+y0 = extent.yMaximum() - gsd_y / 2
 
-# Generate grid-based .jgw file
+# Generate JGW world file with pixel center correction
 grid_jgw = os.path.join(ORTHO_DIR, "orthoimage_grid.jgw")
 with open(grid_jgw, 'w') as f:
     f.write(f"{gsd_x}\n{theta_y}\n{theta_x}\n{-gsd_y}\n{x0}\n{y0}\n")
 
 print(f"Grid .jgw file created: {grid_jgw}")
+
 
 # =====================================
 # Apply Scale Factor & Generate Ground JGW
