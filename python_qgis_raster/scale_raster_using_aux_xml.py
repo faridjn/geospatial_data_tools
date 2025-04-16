@@ -6,11 +6,11 @@ import xml.etree.ElementTree as ET
 # =====================================
 
 # Grid-to-Ground scale factor
-SCALE_FACTOR = 1.0003181600 
+SCALE_FACTOR = 1.0000
 
 # Directory containing orthomosaic 
-ORTHO_DIR = r"C:\Farid\Projects\20250219 - West Central\UAS\07_DELIVERABLES\orthoimage"
-ortho_file_read = os.path.join(ORTHO_DIR, "orthoimage.jpg")
+ORTHO_DIR = r"C:\Users\USFJ139860\Downloads\EPSG6529_Date20250213_Lat35.062004_Lon-106.581892_Mpp0.075_VertJPEG-0000"
+ortho_file_read = os.path.join(ORTHO_DIR, "EPSG6529_Date20250213_Lat35.062004_Lon-106.581892_Mpp0.075_Vert.jpg")
 aux_xml_file = ortho_file_read + ".aux.xml"
 
 
