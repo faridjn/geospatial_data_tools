@@ -6,21 +6,13 @@ import xml.etree.ElementTree as ET
 # =====================================
 
 SCALE_FACTOR = 1.0003181600
-ORTHO_DIR = r"C:\Farid\TEMP\ARCHIVE"
+ORTHO_DIR = r"C:\Farid\TEMP\West_Central_Ortho"
+IMAGE_FORMAT = ".jpg"
 
 # Flags to control output
-# 0 = default is GRID_JGW, 1 = default is GROUND_JGW
-WRITE_DEFAULT_JGW = 1
+WRITE_DEFAULT_JGW = 1 # 0 = GRID_JGW, 1 = GROUND_JGW
 WRITE_GRID_JGW = True
 WRITE_GROUND_JGW = True
-
-# =====================================
-# Write SCALE_FACTOR to file
-# =====================================
-scale_file_path = os.path.join(ORTHO_DIR, "scale_factor.txt")
-with open(scale_file_path, 'w') as scale_file:
-    scale_file.write(f"{SCALE_FACTOR}\n")
-print(f"Written scale factor to: {scale_file_path}")
 
 # =====================================
 # Read GeoTransform Values from AUX.XML
@@ -48,7 +40,7 @@ def read_geotransform(aux_file):
 # =====================================
 
 for filename in os.listdir(ORTHO_DIR):
-    if filename.lower().endswith('.jpg'):
+    if filename.lower().endswith(".jpg"):
         image_path = os.path.join(ORTHO_DIR, filename)
         aux_xml_path = image_path + ".aux.xml"
 
@@ -91,3 +83,11 @@ for filename in os.listdir(ORTHO_DIR):
 
         except Exception as e:
             print(f"Error processing {filename}: {e}")
+
+#=====================================
+# Write SCALE_FACTOR to file
+# =====================================
+scale_file_path = os.path.join(ORTHO_DIR, "scale_factor.txt")
+with open(scale_file_path, 'w') as scale_file:
+    scale_file.write(f"{SCALE_FACTOR}\n")
+print(f"Written scale factor to: {scale_file_path}")
