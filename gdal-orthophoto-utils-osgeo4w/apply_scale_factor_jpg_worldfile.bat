@@ -10,7 +10,7 @@ setlocal EnableExtensions EnableDelayedExpansion
 
 :: === CONFIGURATION ===
 :: Directories
-set "INPUT_DIR=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\01_DRAFT\JPG"
+set "INPUT_DIR=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\02_INTERMEDIATE\JPG_CLIP\ORTHO_IMAGE_TILES"
 set "UNSCALED_DIR=%INPUT_DIR%\jgw_unscaled"
 set "SCALED_DIR=%INPUT_DIR%\jgw_scaled"
 
@@ -65,7 +65,7 @@ for %%F in (*.jgw) do (
 if not exist "%SCALED_DIR%" mkdir "%SCALED_DIR%"
 powershell -NoProfile -Command ^
   "$sf=[double]::Parse('%SCALE_FACTOR%',[System.Globalization.CultureInfo]::InvariantCulture);" ^
-  "'{0:F12}' -f $sf" > "%SCALED_DIR%\scale_factor.txt"
+  "'{0:F12}' -f $sf" > "%SCALED_DIR%\SCALE_FACTOR.txt"
 
 :: === Scale all 6 lines in each .jgw
 echo [INFO] Applying scale factor...
