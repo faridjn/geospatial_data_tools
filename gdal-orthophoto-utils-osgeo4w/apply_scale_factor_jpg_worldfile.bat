@@ -1,78 +1,83 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal EnableExtensions EnableDelayedExpansion
 
-:: Step 1: Get processing folder (default = current folder)
-set "PROCESSING_DIR=%~dp0"
-set /p INPUT_DIR=Enter processing folder path (default = current folder): 
-if not "%INPUT_DIR%"=="" set "PROCESSING_DIR=%INPUT_DIR%"
-set "PROCESSING_DIR=%PROCESSING_DIR:"=%"
+:: ==========================================================
+:: JGW Processor
+:: - Copies originals to jgw_unscaled (same filenames)
+:: - Scales all 6 lines to jgw_scaled (12 decimal places)
+:: - Writes scale_factor.txt in both folders
+:: ==========================================================
 
-:: Step 2: Copy all .jgw files to jgw_unscaled as *-unscaled.jgw
-set "UNSCALED_DIR=%PROCESSING_DIR%\jgw_unscaled"
-if not exist "%UNSCALED_DIR%" mkdir "%UNSCALED_DIR%"
+:: === CONFIGURATION ===
+:: Directories
+set "INPUT_DIR=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\01_DRAFT\JPG"
+set "UNSCALED_DIR=%INPUT_DIR%\jgw_unscaled"
+set "SCALED_DIR=%INPUT_DIR%\jgw_scaled"
 
-for %%F in ("%PROCESSING_DIR%\*.jgw") do (
-    set "BASENAME=%%~nF"
-    copy "%%F" "%UNSCALED_DIR%\!BASENAME!-unscaled.jgw" >nul
-)
-
-:: Step 3: Get scale factor from user
-set "DEFAULT_SCALE=1.0002394192"
-echo Default scale factor = %DEFAULT_SCALE%
-set /p SCALE_FACTOR=Enter scale factor (press Enter to use default): 
-
-if "%SCALE_FACTOR%"=="" set "SCALE_FACTOR=%DEFAULT_SCALE%"
-
-echo Using scale factor: %SCALE_FACTOR%
-
-
-:: Step 4 & 5: Read and scale .jgw values into jgw_scaled
-set "SCALED_DIR=%PROCESSING_DIR%\jgw_scaled"
-if not exist "%SCALED_DIR%" mkdir "%SCALED_DIR%"
-
-for %%F in ("%PROCESSING_DIR%\*.jgw") do (
-    set "BASENAME=%%~nF"
-    set "SCALED_FILE=%SCALED_DIR%\!BASENAME!-scaled.jgw"
-    break > "!SCALED_FILE!" 2>nul
-
-    set "i=0"
-    for /f "usebackq delims=" %%L in ("%%F") do (
-        set /a i+=1
-        set "line=%%L"
-        if !i! leq 4 (
-            powershell -Command "[math]::Round([double](!line!) * %SCALE_FACTOR%, 10).ToString('F10')" >> "!SCALED_FILE!"
-        ) else (
-            echo !line! >> "!SCALED_FILE!"
-        )
-    )
-)
-
-:: Step 6: Delete all .jgw files in the processing directory
-del "%PROCESSING_DIR%\*.jgw" >nul
-
-:: Step 7: Get scaling mode (default = 0)
-set /p SCALING_MODE=Enter scaling mode (0 = UNSCALED, 1 = SCALED, default = 0): 
-if "%SCALING_MODE%"=="" set SCALING_MODE=0
-
-:: Step 8: Copy appropriate files back to processing folder
-if "%SCALING_MODE%"=="0" (
-    for %%F in ("%UNSCALED_DIR%\*-unscaled.jgw") do (
-        set "NEWNAME=%%~nxF"
-        set "NEWNAME=!NEWNAME:-unscaled=!"
-        copy "%%F" "%PROCESSING_DIR%\!NEWNAME!" >nul
-    )
-) else (
-    for %%F in ("%SCALED_DIR%\*-scaled.jgw") do (
-        set "NEWNAME=%%~nxF"
-        set "NEWNAME=!NEWNAME:-scaled=!"
-        copy "%%F" "%PROCESSING_DIR%\!NEWNAME!" >nul
-    )
-)
-
-:: Step 9: Write scale factor to a .txt file
-echo %SCALE_FACTOR% > "%PROCESSING_DIR%\scale_factor.txt"
-echo %SCALE_FACTOR% > "%SCALED_DIR%\scale_factor.txt"
+:: Scale Factor
+set "SCALE_FACTOR=1.0002394192"
 
 echo.
-echo Done! JGW files processed with 10-digit precision.
+echo ===== JGW Processor =====
+echo INPUT_DIR    = %INPUT_DIR%
+echo SCALE_FACTOR = %SCALE_FACTOR%
+echo =========================
+echo.
+
+:: Validate input directory
+if not exist "%INPUT_DIR%" (
+    echo [ERROR] Folder does not exist:
+    echo         "%INPUT_DIR%"
+    echo.
+    pause
+    exit /b 1
+)
+
+pushd "%INPUT_DIR%" >nul 2>&1
+if errorlevel 1 (
+    echo [ERROR] Cannot access "%INPUT_DIR%".
+    echo.
+    pause
+    exit /b 1
+)
+
+:: Ensure there are .jgw files
+dir /b *.jgw >nul 2>&1
+if errorlevel 1 (
+    echo [INFO] No .jgw files found in:
+    echo        "%INPUT_DIR%"
+    echo.
+    popd
+    pause
+    exit /b 0
+)
+
+:: === Create jgw_unscaled and copy originals
+if not exist "%UNSCALED_DIR%" mkdir "%UNSCALED_DIR%"
+for %%F in (*.jgw) do (
+    copy /Y "%%F" "%UNSCALED_DIR%\%%~nxF" >nul
+)
+
+:: Write scale_factor.txt for unscaled (12 decimals, value = 1)
+> "%UNSCALED_DIR%\SCALE_FACTOR.txt" echo 1.000000000000
+
+:: === Create jgw_scaled and write scale_factor.txt with 12 decimals
+if not exist "%SCALED_DIR%" mkdir "%SCALED_DIR%"
+powershell -NoProfile -Command ^
+  "$sf=[double]::Parse('%SCALE_FACTOR%',[System.Globalization.CultureInfo]::InvariantCulture);" ^
+  "'{0:F12}' -f $sf" > "%SCALED_DIR%\scale_factor.txt"
+
+:: === Scale all 6 lines in each .jgw
+echo [INFO] Applying scale factor...
+for %%F in (*.jgw) do (
+    powershell -NoProfile -Command ^
+      "$sf=[double]::Parse('%SCALE_FACTOR%',[System.Globalization.CultureInfo]::InvariantCulture);" ^
+      "Get-Content -LiteralPath '%%F' | ForEach-Object { '{0:F12}' -f ([double]::Parse($_,[System.Globalization.CultureInfo]::InvariantCulture) * $sf) } | Set-Content -Encoding ASCII -LiteralPath '%SCALED_DIR%\%%~nxF'"
+)
+
+echo.
+echo Done! Originals copied to "jgw_unscaled" and scaled files written to "jgw_scaled".
+echo All numeric values written with 12 decimal places.
+echo.
+popd
 pause
