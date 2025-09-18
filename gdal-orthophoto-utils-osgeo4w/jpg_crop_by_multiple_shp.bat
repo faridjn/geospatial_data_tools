@@ -1,3 +1,22 @@
+:: ==========================================================
+:: Author: Farid Javadnejad
+:: Date: 2025-09-17
+:: Last Update: 2025-09-18
+::
+:: DESCRIPTION:
+:: - Script: Crops JPG images using multiple SHP files as cutlines
+:: - INPUT_DIR: Source JPGs
+:: - SHAPE_DIR: Shapefiles used for cropping
+:: - OUTPUT_DIR: Cropped JPGs with .jgw worldfiles
+:: - TEMP_DIR: Intermediate GeoTIFFs for processing
+:: - Output filenames include both image and shapefile names
+:: - Uses gdalwarp for cropping and gdal_translate for JPEG conversion
+:: - Renames .wld to .jgw if needed
+::
+:: DISCLAIMER:
+:: This script was developed with the assistance of AI tools for debugging, reviewing, and testing.
+:: ==========================================================
+
 @echo off
 setlocal enabledelayedexpansion
 

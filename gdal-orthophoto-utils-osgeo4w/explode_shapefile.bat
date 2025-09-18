@@ -1,3 +1,19 @@
+:: ==========================================================
+:: Author: Farid Javadnejad
+:: Date: 2025-09-17
+:: Last Update: 2025-09-18
+::
+:: DESCRIPTION:
+:: - Script: Exports each feature from the first .shp file in INPUT_DIR as an individual shapefile
+:: - INPUT_DIR must contain at least one .shp file
+:: - OUTPUT_DIR 'EXPLODE' is auto-created inside INPUT_DIR
+:: - Uses ogrinfo to get feature count, then loops with ogr2ogr to extract by FID
+:: - Output: One shapefile per feature saved in EXPLODE folder
+::
+:: DISCLAIMER:
+:: This script was developed with the assistance of AI tools for debugging, reviewing, and testing.
+:: ==========================================================
+
 @echo off
 :: Set input directory and shapefile
 set "INPUT_DIR=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\QGIS\Shapefile"
