@@ -5,14 +5,14 @@ import xml.etree.ElementTree as ET
 # Configuration
 # =====================================
 
-SCALE_FACTOR = 1.0
-ORTHO_DIR = r"Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\02_INTERMEDIATE\JPG\JPG_TILES"
+SCALE_FACTOR = 0.999760638
+ORTHO_DIR = r"P:\2025\NOGAL CANYON\02_PRODUCTION\04_QA_QC\SURFACE_COMPARE\2025 - 2019"
 IMAGE_FORMAT = ".jpg"
 
 # Flags to control output
 WRITE_DEFAULT_JGW = 0 # 0 = GRID_JGW, 1 = GROUND_JGW
 WRITE_GRID_JGW = True
-WRITE_GROUND_JGW = False
+WRITE_GROUND_JGW = True
 
 # =====================================
 # Read GeoTransform Values from AUX.XML
