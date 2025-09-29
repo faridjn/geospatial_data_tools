@@ -2,8 +2,8 @@
 REM ---- User-defined variables ----
 set "scale_factor=0.999760638"
 
-set "input_path=P:\2025\NOGAL CANYON\02_PRODUCTION\04_QA_QC\SURFACE_COMPARE\2025 - 2019"
-set "file_name=DEM_diff_rendered.tif"
+set "input_path=P:\2025\NOGAL CANYON\02_PRODUCTION\04_QA_QC\SURFACE_COMPARE\2025 - 2019 Updated\Raster"
+set "file_name=DTM2025-minus-1100980_XDTM_clipped_rendered.tif"
 set "output_path=%input_path%"
 
 REM ---- Derived paths ----
