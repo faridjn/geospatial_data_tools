@@ -19,6 +19,9 @@
 
 @echo off
 setlocal enabledelayedexpansion
+:: Set GDAL path and update PATH
+set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
+set PATH=%GDAL_PATH%;%PATH%
 
 :: Define directories
 set "DIR_INPUT=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\01_DRAFT\JPG"

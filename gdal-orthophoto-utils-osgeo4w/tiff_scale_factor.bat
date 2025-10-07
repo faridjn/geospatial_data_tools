@@ -1,4 +1,8 @@
 @echo off
+:: Set GDAL path and update PATH
+set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
+set PATH=%GDAL_PATH%;%PATH%
+
 REM ---- User-defined variables ----
 set "scale_factor=0.999760638"
 
