@@ -15,6 +15,6 @@ set "input_file=%input_path%\%file_name%"
 set "output_file=%output_path%\%file_name:.tif=_scaled.tif%"
 
 REM ---- Call Python script from .py subfolder ----
-python ".py\calculate_scaled_bounds.py" "%input_file%" "%output_file%" %scale_factor%
+python ".py\calculate_scaled_bounds_tiff_scale_factor.py" "%input_file%" "%output_file%" %scale_factor%
 
 pause

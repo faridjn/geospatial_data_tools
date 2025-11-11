@@ -16,7 +16,7 @@
 
 @echo off
 :: Set input directory and shapefile
-set "INPUT_DIR=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\QGIS\Shapefile"
+set "INPUT_DIR=P:\2025\251017 - SHIPROCK US-64\02_PRODUCTION\06_EXPORTS\GIS\Singleparts"
 
 :: Change to input directory
 cd /d "%INPUT_DIR%"

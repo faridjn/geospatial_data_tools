@@ -24,9 +24,9 @@ set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
 set PATH=%GDAL_PATH%;%PATH%
 
 :: Define directories
-set "DIR_INPUT=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\01_DRAFT\JPG"
-set "DIR_OUTPUT=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\ORTHO\02_INTERMEDIATE\JPG_CLIP"
-set "DIR_SHAPE=Z:\2025\NOGAL CANYON\02_PRODUCTION\06_EXPORTS\QGIS\Shapefile\SHP_3"
+set "DIR_INPUT=P:\2025\MARC BRANDT PARK\02_PRODUCTION\06_EXPORTS\ORTHO\JPG"
+set "DIR_OUTPUT=P:\2025\MARC BRANDT PARK\02_PRODUCTION\06_EXPORTS\ORTHO\JPG_Clipped"
+set "DIR_SHAPE=P:\2025\MARC BRANDT PARK\02_PRODUCTION\06_EXPORTS\ORTHO\GIS"
 
 :: Output subfolders
 set "DIR_JPG=%DIR_OUTPUT%\ORTHO_IMAGE_TILES"
@@ -79,7 +79,7 @@ for %%f in ("%DIR_INPUT%\*.jpg") do (
         gdal_translate --config CPL_PROGRESS_FORMAT "PERCENT" ^
                        -of JPEG ^
                        -co WORLDFILE=YES ^
-                       -co QUALITY=99 ^
+                       -co QUALITY=85 ^
                        "!TEMP_TIF!" "!OUT_JPG!"
 
         :: Step 1c: Rename .wld to .jgw if necessary
