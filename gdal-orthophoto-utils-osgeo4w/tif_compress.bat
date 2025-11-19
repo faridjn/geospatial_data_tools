@@ -21,13 +21,13 @@ IF NOT EXIST "%COMPRESS_DIR%" (
 
 :: Loop through all .tif files in DIR
 FOR %%F IN ("%DIR%\*.tif") DO (
-    ECHO Compressing "%%F" to "%COMPRESS_DIR%\%%~nxF" using ZSTD level %ZSTD_LEVEL%...
+    ECHO Compressing %%F to %COMPRESS_DIR%\%%~nxF using ZSTD level %ZSTD_LEVEL%...
     gdal_translate "%%F" "%COMPRESS_DIR%\%%~nxF" ^
         -co COMPRESS=ZSTD ^
         -co ZSTD_LEVEL=%ZSTD_LEVEL% ^
         -co TILED=YES
 
-    ECHO Adding pyramids (overviews) to "%COMPRESS_DIR%\%%~nxF"...
+    ECHO Adding pyramids (overviews) to %COMPRESS_DIR%\%%~nxF...
     gdaladdo "%COMPRESS_DIR%\%%~nxF" 2 4 8 16 32 --config COMPRESS_OVERVIEW ZSTD --config ZSTD_LEVEL %ZSTD_LEVEL%
 )
 

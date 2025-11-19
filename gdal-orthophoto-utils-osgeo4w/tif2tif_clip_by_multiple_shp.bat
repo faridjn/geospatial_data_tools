@@ -57,18 +57,21 @@ for %%e in (tif tiff) do (
         set "SHP_NAME=%%~ns"
         set "OUT_TIF=%DIR_TIF%\!IMG_NAME!-!SHP_NAME!.tif"
 
-        :: Direct crop to GeoTIFF with JPEG compression
-        gdalwarp --config CPL_PROGRESS_FORMAT "PERCENT" ^
-                 -cutline "%%s" ^
-                 -crop_to_cutline ^
-                 -r near ^
-                 -of GTiff ^
-                 -co COMPRESS=JPEG ^
-                 -co JPEG_QUALITY=85 ^
-                 -co PHOTOMETRIC=YCBCR ^
-                 -co TILED=YES ^
-                 -co WORLDFILE=YES ^
-                 "%%f" "!OUT_TIF!"
+        :: Direct crop to GeoTIFF with JPEG compression and tiling
+		gdalwarp --config CPL_PROGRESS_FORMAT "PERCENT" ^
+				 -cutline "%%s" ^
+				 -crop_to_cutline ^
+				 -r near ^
+				 -of GTiff ^
+				 -co COMPRESS=JPEG ^
+				 -co JPEG_QUALITY=85 ^
+				 -co PHOTOMETRIC=YCBCR ^
+				 -co TILED=YES ^
+				 -co BIGTIFF=IF_SAFER ^
+				 "%%f" "!OUT_TIF!"
+
+		:: Build pyramids for performance
+		gdaladdo "!OUT_TIF!" 2 4 8 16
 
         )
     )

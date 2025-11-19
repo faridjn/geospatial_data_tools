@@ -2,16 +2,14 @@
 :: Author: Farid Javadnejad
 :: Date: 2025-09-17
 :: Last Update: 2025-10-31
-
 :: ==========================================================
 :: DESCRIPTION:
 :: - Script: Clips GeoTIFF images using multiple SHP files as cutlines
 :: - INPUT_DIR: Source GeoTIFFs (.tif / .tiff)
 :: - SHAPE_DIR: Shapefiles used for clipping
-:: - OUTPUT_DIR: Cropped GeoTIFFs (.tif) using JPEG compression (not JPG format)
+:: - OUTPUT_DIR: Cropped GeoTIFFs (.tif)
 :: - Output filenames include both image and shapefile names
 :: - Uses gdalwarp to crop directly to GeoTIFF with JPEG compression
-:: - Ensures .tfw worldfiles are created (renames .wld if needed)
 ::
 :: DISCLAIMER:
 :: This script was developed with the assistance of AI tools for debugging, reviewing, and testing.
@@ -25,9 +23,9 @@ set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
 set PATH=%GDAL_PATH%;%PATH%
 
 :: Define directories (update as needed)
-set "DIR_INPUT=P:\2025\SHIPROCK US-64\02_PRODUCTION\01_PIX4D\SHIPROCK_US64_PIX4D\SHIPROCK_US64_PIX4D_251112\exports"
-set "DIR_OUTPUT=P:\2025\SHIPROCK US-64\02_PRODUCTION\06_EXPORTS\ORTHO_PROCESS"
-set "DIR_SHAPE=P:\2025\SHIPROCK US-64\02_PRODUCTION\06_EXPORTS\GIS\Singleparts\EXPLODE"
+set "DIR_INPUT=P:\2025\MARC BRANDT PARK\02_PRODUCTION\06_EXPORTS\ORTHO\TIFF"
+set "DIR_OUTPUT=P:\2025\MARC BRANDT PARK\02_PRODUCTION\06_EXPORTS\ORTHO\TIFF_Clipped"
+set "DIR_SHAPE=P:\2025\MARC BRANDT PARK\02_PRODUCTION\06_EXPORTS\ORTHO\GIS"
 
 :: Output subfolder for cropped GeoTIFFs
 set "DIR_TIF=%DIR_OUTPUT%\ORTHO_IMAGE_TILES"
@@ -55,7 +53,7 @@ for %%e in (tif tiff) do (
         :: Build output names
         set "IMG_NAME=%%~nf"
         set "SHP_NAME=%%~ns"
-        set "OUT_TIF=%DIR_TIF%\!IMG_NAME!-!SHP_NAME!.tif"
+        set "OUT_TIF=%DIR_TIF%\!IMG_NAME!-!SHP_NAME!.tiff"
 
         :: Direct crop to GeoTIFF with JPEG compression
         gdalwarp --config CPL_PROGRESS_FORMAT "PERCENT" ^
@@ -67,8 +65,10 @@ for %%e in (tif tiff) do (
                  -co JPEG_QUALITY=85 ^
                  -co PHOTOMETRIC=YCBCR ^
                  -co TILED=YES ^
-                 -co WORLDFILE=YES ^
                  "%%f" "!OUT_TIF!"
+
+	:: Build pyramids for performance
+		gdaladdo "!OUT_TIF!" 2 4 8 16
 
         )
     )
