@@ -23,7 +23,7 @@ setlocal EnableDelayedExpansion
 :: ------------------------------
 :: Configure GDAL/QGIS binaries
 :: ------------------------------
-set "GDAL_PATH=C:\Program Files\QGIS 3.40.12\bin"
+set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
 
 :: Check if GDAL path exists
 if exist "%GDAL_PATH%" (
@@ -41,16 +41,15 @@ if exist "%GDAL_PATH%" (
 :: ------------------------------
 :: Project directories (edit as needed)
 :: ------------------------------
-set "DIR_INPUT=P:\2025\ARROYO DE LOS PINOS\RS\02_PRODUCTION\01_PIX4D\ARROYO DE LOS PINOS\exports"
-set "DIR_OUTPUT=P:\2025\ARROYO DE LOS PINOS\RS\02_PRODUCTION\08_EXPORTS\ORTHO_JPG"
-set "DIR_SHAPE=P:\2025\ARROYO DE LOS PINOS\RS\02_PRODUCTION\05_GIS\Shapefiles"
+set "DIR_INPUT=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\TrueOrthoGeoTIFF"
+set "DIR_SHAPE=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\QGIS\Shapefile\EXPLODE"
 
 :: Output subfolder for cropped JPEGs
-set "DIR_JPG=%DIR_OUTPUT%\TILES_JPG"
+set "DIR_OUTPUT=%DIR_INPUT%\TILES_JPG"
 
 :: Create output directories if they don't exist
 if not exist "%DIR_OUTPUT%" mkdir "%DIR_OUTPUT%"
-if not exist "%DIR_JPG%" mkdir "%DIR_JPG%"
+if not exist "%DIR_OUTPUT%" mkdir "%DIR_OUTPUT%"
 
 :: ------------------------------
 :: GDAL progress formatting
@@ -59,7 +58,7 @@ set "CPL_PROGRESS_FORMAT=PERCENT"
 
 echo ==========================================
 echo Input Directory:  %DIR_INPUT%
-echo Output Directory: %DIR_JPG%
+echo Output Directory: %DIR_OUTPUT%
 echo Shape Directory:  %DIR_SHAPE%
 echo ==========================================
 echo Clip TIFFs and export as JPEG (.jpg + .jgw)
@@ -74,7 +73,7 @@ for %%e in (tif tiff) do (
 
         set "IMG_NAME=%%~nf"
         set "SHP_NAME=%%~ns"
-        set "OUT_JPG=%DIR_JPG%\!IMG_NAME!-!SHP_NAME!.jpg"
+        set "OUT_JPG=%DIR_OUTPUT%\!IMG_NAME!-!SHP_NAME!.jpg"
 
         gdalwarp ^
           --config CPL_PROGRESS_FORMAT PERCENT ^
@@ -87,7 +86,7 @@ for %%e in (tif tiff) do (
           "%%~ff" "!OUT_JPG!"
 
         :: Rename world files (.jpgw or .wld) to .jgw
-        pushd "%DIR_JPG%"
+        pushd "%DIR_OUTPUT%"
         for %%x in (*.wld *.jpgw) do (
             ren "%%x" "%%~nx.jgw"
         )
