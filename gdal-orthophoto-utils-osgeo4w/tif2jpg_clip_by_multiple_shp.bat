@@ -1,7 +1,7 @@
 :: ==========================================================
 :: Author: Farid Javadnejad
 :: Date: 2025-09-17
-:: Last Update: 2025-10-31
+:: Last Update: 2025-11-20
 
 :: ==========================================================
 :: DESCRIPTION:
@@ -15,25 +15,38 @@
 :: DISCLAIMER:
 :: This script was developed with the assistance of AI tools for debugging, reviewing, and testing.
 :: ==========================================================
-
 @echo off
 setlocal EnableDelayedExpansion
 
 :: ------------------------------
+
+:: ------------------------------
 :: Configure GDAL/QGIS binaries
 :: ------------------------------
-set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
-set "PATH=%GDAL_PATH%;%PATH%"
+set "GDAL_PATH=C:\Program Files\QGIS 3.40.12\bin"
+
+:: Check if GDAL path exists
+if exist "%GDAL_PATH%" (
+    echo GDAL path found: %GDAL_PATH%
+    set "PATH=%GDAL_PATH%;%PATH%"
+) else (
+    echo ERROR: GDAL path not found at %GDAL_PATH%
+    echo Please verify QGIS/GDAL installation or update GDAL_PATH in the script.
+    pause
+    exit /b 1
+)
+
+
 
 :: ------------------------------
 :: Project directories (edit as needed)
 :: ------------------------------
-set "DIR_INPUT=P:\2025\SHIPROCK US-64\02_PRODUCTION\01_PIX4D\SHIPROCK_US64_PIX4D\SHIPROCK_US64_PIX4D_251112\exports"
-set "DIR_OUTPUT=P:\2025\SHIPROCK US-64\02_PRODUCTION\06_EXPORTS\ORTHO_JPG_PROCESS"
-set "DIR_SHAPE=P:\2025\SHIPROCK US-64\02_PRODUCTION\06_EXPORTS\GIS\Singleparts\EXPLODE"
+set "DIR_INPUT=P:\2025\ARROYO DE LOS PINOS\RS\02_PRODUCTION\01_PIX4D\ARROYO DE LOS PINOS\exports"
+set "DIR_OUTPUT=P:\2025\ARROYO DE LOS PINOS\RS\02_PRODUCTION\08_EXPORTS\ORTHO_JPG"
+set "DIR_SHAPE=P:\2025\ARROYO DE LOS PINOS\RS\02_PRODUCTION\05_GIS\Shapefiles"
 
 :: Output subfolder for cropped JPEGs
-set "DIR_JPG=%DIR_OUTPUT%\ORTHO_IMAGE_TILES_JPG"
+set "DIR_JPG=%DIR_OUTPUT%\TILES_JPG"
 
 :: Create output directories if they don't exist
 if not exist "%DIR_OUTPUT%" mkdir "%DIR_OUTPUT%"
@@ -51,22 +64,20 @@ echo Shape Directory:  %DIR_SHAPE%
 echo ==========================================
 echo Clip TIFFs and export as JPEG (.jpg + .jgw)
 
-:: Helper to process both .tif and .tiff
+:: Process both .tif and .tiff
 for %%e in (tif tiff) do (
   for %%f in ("%DIR_INPUT%\*.%%e") do (
     for %%s in ("%DIR_SHAPE%\*.shp") do (
 
         echo(
-        echo Processing Image: %%~nxf  with Shape: %%~nxs
+        echo Processing Image: %%~nxf with Shape: %%~nxs
 
-        :: Build output names
         set "IMG_NAME=%%~nf"
         set "SHP_NAME=%%~ns"
         set "OUT_JPG=%DIR_JPG%\!IMG_NAME!-!SHP_NAME!.jpg"
 
-        :: Crop and convert to JPEG; emit world file
         gdalwarp ^
-          --config CPL_PROGRESS_FORMAT "PERCENT" ^
+          --config CPL_PROGRESS_FORMAT PERCENT ^
           -cutline "%%~fs" ^
           -crop_to_cutline ^
           -r near ^
@@ -75,15 +86,13 @@ for %%e in (tif tiff) do (
           -co WORLDFILE=YES ^
           "%%~ff" "!OUT_JPG!"
 
-        :: If GDAL creates .jpgw (some builds do), rename to .jgw to standardize
-        if exist "!OUT_JPG!w" ren "!OUT_JPG!w" "!IMG_NAME!-!SHP_NAME!.jgw"
+        :: Rename world files (.jpgw or .wld) to .jgw
+        pushd "%DIR_JPG%"
+        for %%x in (*.wld *.jpgw) do (
+            ren "%%x" "%%~nx.jgw"
+        )
+        popd
 
     )
   )
 )
-
-echo(
-echo All done! Cropped JPEGs (and world files) created in:
-echo   %DIR_JPG%
-pause
-endlocal

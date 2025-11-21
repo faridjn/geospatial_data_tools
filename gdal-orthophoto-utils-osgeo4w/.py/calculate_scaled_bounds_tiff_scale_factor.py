@@ -29,6 +29,7 @@ new_width = int(ds.RasterXSize / scale_factor)
 new_height = int(ds.RasterYSize / scale_factor)
 
 # Run gdal_translate with scaled bounds and output size
-cmd = f'gdal_translate -a_ullr {new_ulx} {new_uly} {new_lrx} {new_lry} -outsize {new_width} {new_height} -r bilinear -co COMPRESS=LZW -co TILED=YES -co BIGTIFF=IF_SAFER "{input_file}" "{output_file}"'
+cmd = f'gdal_translate -a_ullr {new_ulx} {new_uly} {new_lrx} {new_lry} -co COMPRESS=LZW -co TILED=YES -co BIGTIFF=IF_SAFER "{input_file}" "{output_file}"'
+
 print(f"Running:\n{cmd}")
 os.system(cmd)

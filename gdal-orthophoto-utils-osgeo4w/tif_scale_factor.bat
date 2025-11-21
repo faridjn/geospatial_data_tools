@@ -4,7 +4,7 @@ set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
 set PATH=%GDAL_PATH%;%PATH%
 
 REM ---- User-defined variables ----
-set "scale_factor=0.999760638"
+set "scale_factor=1.0003464900"
 
 set "input_path=P:\2025\NOGAL CANYON\02_PRODUCTION\04_QA_QC\SURFACE_COMPARE\2025 - 2019 Updated\Raster"
 set "file_name=DTM2025-minus-1100980_XDTM_clipped_rendered.tif"
