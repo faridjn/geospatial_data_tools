@@ -23,26 +23,15 @@ setlocal EnableDelayedExpansion
 :: ------------------------------
 :: Configure GDAL/QGIS binaries
 :: ------------------------------
-set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
-
-:: Check if GDAL path exists
-if exist "%GDAL_PATH%" (
-    echo GDAL path found: %GDAL_PATH%
-    set "PATH=%GDAL_PATH%;%PATH%"
-) else (
-    echo ERROR: GDAL path not found at %GDAL_PATH%
-    echo Please verify QGIS/GDAL installation or update GDAL_PATH in the script.
-    pause
-    exit /b 1
-)
+set "GDAL_PATH=C:\Program Files\QGIS 3.40.12\bin"
 
 
 
 :: ------------------------------
 :: Project directories (edit as needed)
 :: ------------------------------
-set "DIR_INPUT=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\TrueOrthoGeoTIFF"
-set "DIR_SHAPE=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\QGIS\Shapefile\EXPLODE"
+set "DIR_INPUT=P:\2025\NTUA GANADO LAGOON\RS\02_PRODUCTION\01_PIX4D\NTUA Ganado AZ\exports\ortho_tiff"
+set "DIR_SHAPE=P:\2025\NTUA GANADO LAGOON\RS\02_PRODUCTION\05_GIS\BNDRY"
 
 :: Output subfolder for cropped JPEGs
 set "DIR_OUTPUT=%DIR_INPUT%\TILES_JPG"
