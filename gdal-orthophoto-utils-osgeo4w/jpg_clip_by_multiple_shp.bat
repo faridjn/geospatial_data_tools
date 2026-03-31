@@ -20,28 +20,26 @@
 @echo off
 setlocal enabledelayedexpansion
 :: Set GDAL path and update PATH
-set "GDAL_PATH=C:\Program Files\QGIS 3.40.10\bin"
+set "GDAL_PATH=C:\Program Files\QGIS 3.40.12\bin"
 set PATH=%GDAL_PATH%;%PATH%
 
 :: Define directories
-set "DIR_INPUT=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\08_EXPORTS\ORTHO_SD"
-set "DIR_OUTPUT=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\08_EXPORTS\ORTHO_SD\TILES_JPG"
-set "DIR_SHAPE=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\05_GIS\BNDRY\EXPLODE"
+set "DIR_INPUT=P:\2025\NTUA GANADO LAGOON\RS\02_PRODUCTION\01_PIX4D\NTUA Ganado AZ\exports\ortho_jpg"
+set "DIR_SHAPE=P:\2025\NTUA GANADO LAGOON\RS\02_PRODUCTION\05_GIS\BNDRY"
 
 :: Output subfolders
-set "DIR_JPG=%DIR_OUTPUT%\ORTHO_IMAGE_TILES"
-set "DIR_TEMP=%DIR_OUTPUT%\TEMP"
+set "DIR_OUT=%DIR_INPUT%\TILES_JPG"
+set "DIR_TEMP=%DIR_INPUT%\TEMP"
 
 :: Create output directories if they don't exist
-if not exist "%DIR_OUTPUT%" mkdir "%DIR_OUTPUT%"
-if not exist "%DIR_JPG%" mkdir "%DIR_JPG%"
+if not exist "%DIR_OUT%" mkdir "%DIR_OUT%"
 if not exist "%DIR_TEMP%" mkdir "%DIR_TEMP%"
 
 
 :: Print directory paths
 echo ==========================================
 echo Input Directory:  %DIR_INPUT%
-echo Output Directory: %DIR_JPG%
+echo Output Directory: %DIR_OUT%
 echo Shape Directory:  %DIR_SHAPE%
 echo ==========================================
 
@@ -62,7 +60,7 @@ for %%f in ("%DIR_INPUT%\*.jpg") do (
         set "IMG_NAME=%%~nf"
         set "SHP_NAME=%%~ns"
         set "TEMP_TIF=%DIR_TEMP%\temp_!IMG_NAME!-!SHP_NAME!.tif"
-        set "OUT_JPG=%DIR_JPG%\!IMG_NAME!-!SHP_NAME!.jpg"
+        set "OUT_JPG=%DIR_OUT%\!IMG_NAME!-!SHP_NAME!.jpg"
 
         :: Step 1a: Warp (crop) into temporary GeoTIFF
         gdalwarp --config CPL_PROGRESS_FORMAT "PERCENT" ^
@@ -83,14 +81,14 @@ for %%f in ("%DIR_INPUT%\*.jpg") do (
                        "!TEMP_TIF!" "!OUT_JPG!"
 
         :: Step 1c: Rename .wld to .jgw if necessary
-        if exist "%DIR_JPG%\!IMG_NAME!-!SHP_NAME!.wld" (
-            ren "%DIR_JPG%\!IMG_NAME!-!SHP_NAME!.wld" "!IMG_NAME!-!SHP_NAME!.jgw"
+        if exist "%DIR_OUT%\!IMG_NAME!-!SHP_NAME!.wld" (
+            ren "%DIR_OUT%\!IMG_NAME!-!SHP_NAME!.wld" "!IMG_NAME!-!SHP_NAME!.jgw"
         )
     )
 )
 
 
 echo.
-echo All done! Cropped JPG + JGW created in %DIR_JPG%
+echo All done! Cropped JPG + JGW created in %DIR_OUT%
 echo Temporary TIF files kept in %DIR_TEMP%
 pause
