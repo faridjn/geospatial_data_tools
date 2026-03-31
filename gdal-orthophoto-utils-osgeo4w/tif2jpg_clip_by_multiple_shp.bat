@@ -41,8 +41,8 @@ if exist "%GDAL_PATH%" (
 :: ------------------------------
 :: Project directories (edit as needed)
 :: ------------------------------
-set "DIR_INPUT=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\TrueOrthoGeoTIFF"
-set "DIR_SHAPE=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\QGIS\Shapefile\EXPLODE"
+set "DIR_INPUT=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\01_PIX4D\NTUA Ganado AZ\exports\ortho_tiff"
+set "DIR_SHAPE=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\05_GIS\BNDRY\EXPLODE"
 
 :: Output subfolder for cropped JPEGs
 set "DIR_OUTPUT=%DIR_INPUT%\TILES_JPG"

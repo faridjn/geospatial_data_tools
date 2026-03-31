@@ -16,7 +16,7 @@
 
 @echo off
 :: Set input directory and shapefile
-set "INPUT_DIR=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\QGIS\Shapefile"
+set "INPUT_DIR=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\05_GIS\BNDRY"
 
 :: Change to input directory
 cd /d "%INPUT_DIR%"

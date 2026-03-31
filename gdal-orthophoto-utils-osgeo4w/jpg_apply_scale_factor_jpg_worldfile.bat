@@ -32,8 +32,8 @@ setlocal EnableExtensions EnableDelayedExpansion
 :: ==========================================================
 
 :: === File Paths and Scale Factor ===
-set "INPUT_DIR=P:\2025\SNL-IGLOO\RS\02_PRODUCTION\06_OTHER_TOOLS\Nearmap\TrueOrthoGeoTIFF\Compressed"
-set "SCALE_FACTOR=1.0003464900"
+set "INPUT_DIR=Z:\2025_LOCAL\NTUA GANADO LAGOON\RS\02_PRODUCTION\08_EXPORTS\ORTHO_SD\TILES_JPG"
+set "SCALE_FACTOR=1.0003632487"
 
 :: === Derived Paths ===
 set "UNSCALED_DIR=%INPUT_DIR%\jgw_unscaled"
