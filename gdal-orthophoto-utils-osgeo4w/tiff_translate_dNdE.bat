@@ -24,7 +24,7 @@
 SETLOCAL EnableDelayedExpansion
 
 REM === Configuration ===
-SET "INPUT_DIR=P:\2026\SNL Nearmap Imagery"
+SET "INPUT_DIR=P:\2026\Imagery"
 SET "dE=0.7"
 SET "dN=0.4"
 
